@@ -677,6 +677,9 @@ object_t* project_export_dat(project_t* project)
             }
             */
             
+            object->ride_header->cars[i].car_effect = 0;
+            object->ride_header->cars[i].effect_visual = 1;
+            
             // Enable all extra swinging frames
         // printf("flags %x\n",project->cars[i].flags);
             if (!project->cars[i].flags & CAR_CAN_INVERT /*|| i%2==0*/) object->ride_header->cars[i].flags |= CAR_FLAG_13;//this is only set on the above trains for some reason.
@@ -723,9 +726,6 @@ object_t* project_export_dat(project_t* project)
             object->ride_header->cars[i].running_sound = project->cars[i].running_sound;
             object->ride_header->cars[i].secondary_sound = project->cars[i].secondary_sound;
             object->ride_header->cars[i].z_value = project->cars[i].z_value;
-            
-            object->ride_header->cars[i].car_effect = 0;
-            object->ride_header->cars[i].effect_visual = 0;
             // Some sprites ought be included if others are. Here we compute the
             // minimum set of sprite flags needed that includes all the selected flags
             object->ride_header->cars[i].sprites = project->cars[i].sprites | SPRITE_FLAT_SLOPE;
