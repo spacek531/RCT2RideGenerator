@@ -468,11 +468,6 @@ void project_render_sprites(project_t* project, object_t* object)
             base_frame += 4 * sprites_per_view;
         }
         if (sprite_flags & SPRITE_CORKSCREW) {
-#define CORKSCREW_ANGLE_1 2.0 * M_PI_12
-#define CORKSCREW_ANGLE_2 4.0 * M_PI_12
-#define CORKSCREW_ANGLE_3 M_PI_2
-#define CORKSCREW_ANGLE_4 8.0 * M_PI_12
-#define CORKSCREW_ANGLE_5 10.0 * M_PI_12
 
             // Corkscrew right
             render_rotation(images, animation, flags, base_frame, sprites_per_image,
