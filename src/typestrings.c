@@ -121,9 +121,97 @@ ride_type_t* ride_type_by_name(const char* name)
     return NULL;
 }
 
+//animation types
+
+ride_type_t animation_types[NUM_ANIMATION_TYPES] = {
+    { VEHICLE_ANIMATION_NONE, "No animation"},
+    { VEHICLE_ANIMATION_MINITURE_RAILWAY_LOCOMOTIVE, "Steam train"},
+    { VEHICLE_ANIMATION_SWAN, "Swan boats"},
+    { VEHICLE_ANIMATION_CANOES, "Canoes"},
+    { VEHICLE_ANIMATION_ROW_BOATS, "Rowboats"},
+    { VEHICLE_ANIMATION_WATER_TRICYCLES, "Water tricycles"},
+    { VEHICLE_ANIMATION_OBSERVATION_TOWER, "Observation tower"},
+    { VEHICLE_ANIMATION_HELICARS, "Helicopters ride"},
+    { VEHICLE_ANIMATION_MONORAIL_CYCLES, "Monorail cyles"},
+    { VEHICLE_ANIMATION_MULTI_DIM_COASTER, "Multidimension coaster"}
+};
+
+ride_type_t* animation_type_by_index(int index)
+{
+    return animation_types + index;
+}
+
+//ride flags
+
+ride_type_t ride_flags[NUM_RIDE_FLAGS] = {
+    { RIDE_VEHICLE_TAB_SCALE_HALF, "Vehicle tab preview half scale"},
+    { RIDE_NO_INVERSIONS, "No inversions"},
+    { RIDE_NO_BANKED_TRACK, "No banked track"},
+    { RIDE_CHUFFING_ON_DEPART, "Steam train chuffing on departure"},
+    { RIDE_SWING_MODE_1, "Swing mode 1"},
+    { RIDE_ROTATION_MODE_1, "Scrambled eggs rotation mode"},
+    { RIDE_ROTATION_MODE_2, "Enterprise rotation mode"},
+    { RIDE_FLAG_ALLOW_BOATS_TO_WANDER, "Allow boats to wander"},
+    { RIDE_PLAY_SPLASH_SOUND, "Play splash sound on level track"},
+    { RIDE_SLOW_IN_WATER, "Play splash sound on water sections"},
+    { RIDE_COVERED, "Covered ride"},
+    { RIDE_LIMIT_AIRTIME_BONUS, "Limit airtime bonus"},
+    { RIDE_SEPARATE_RIDE_DEPRECATED, "Separate ride (OpenRCT2 deprecated)"},
+    { RIDE_SEPARATE_RIDE, "Allow track designs"},
+    { RIDE_CANNOT_BREAK_DOWN, "Disable breakdowns"},
+    { RIDE_DISABLE_LAST_OPERATING_MODE, "Disable last operating mode"},
+    { RIDE_DISALLOW_ADJACENT_WALLS, "Disallow adjacent walls"},
+    { RIDE_DISABLE_FIRST_TWO_OPERATING_MODES, "Disable first two operating modes"},
+    { RIDE_DISABLE_VEHICLE_IMPACTS, "Disable crashing on vehicle impacts"},
+    { RIDE_DISABLE_COLOR_TAB, "Disable color tab (swing mode 1 must be set)"},
+    { RIDE_ALTERNATIVE_SWING_MODE_2, "Alternative swing mode 2"},
+};
+
+ride_type_t* ride_flag_by_index(int index)
+{
+    return ride_flags + index;
+}
+
+//vehicle flags
+
+ride_type_t vehicle_flags[NUM_VEHICLE_FLAGS] = {
+    { CAR_COAST_AND_FLY_OFF, "Coast and fly off"},
+    { CAR_NO_UPSTOPS_TIGHT_TOLERANCE, "No upstops (-0.40 G limit)"},
+    { CAR_NO_UPSTOPS, "No upstops (-0.45 G limit)"},
+    { CAR_IS_MINIGOLFER, "Minigolfer"},
+    { CAR_FLAG_4, "Flag 4)"},
+    { CAR_FLAG_5, "Flag 5"},
+    { CAR_CAN_INVERT, "Can invert for long periods"},
+    { CAR_DODGEM_LIGHTS, "Dodgem lights"},
+    { CAR_OPENS_DOORS, "Opens oncoming doors"},
+    { CAR_FLAG_10, "Flag 10"},
+    { CAR_FLAG_11, "Flag 11"},
+    { CAR_OVERRIDE_VERTICAL_FRAMES, "Override vertical frames"},
+    { CAR_FLAG_11, "Flag 13"},
+    { CAR_FLAG_15, "Flag 15"},
+    { CAR_ENABLE_REMAP2, "Remap Color 2"},
+    { CAR_IS_SWINGING, "Swinging"},
+    { CAR_IS_SPINNING, "Spinning"},
+    { CAR_IS_POWERED, "Powered"},
+    { CAR_RIDERS_SCREAM, "Riders scream"},
+    { CAR_BOAT_COLLISIONS, "Boat Collisions"},
+    { CAR_IS_ANIMATED, "Car is animated"},
+    { CAR_RIDERS_MOVE, "Riders change positions during animation"},
+    { CAR_FLAG_26, "Flag 26"},
+    { CAR_IS_CHAIRLIFT, "Chairlift"},
+    { CAR_WATER_PROPELLED, "Pushed by water"},
+    { CAR_GO_KART, "Go kart"},
+    { CAR_DODGEM_PLACEMENT, "Dodgem placement"}
+};
+
+ride_type_t* vehicle_flag_by_index(int index)
+{
+    return vehicle_flags + index;
+}
+
 // visual effect types
 
-ride_type_t sprite_groups[NUM_VISUAL_EFFECTS] = {
+ride_type_t visual_effects[NUM_VISUAL_EFFECTS] = {
     { VEHICLE_VISUAL_DEFAULT, "Default" },
     { VEHICLE_VISUAL_FLAT_RIDE_OR_CAR_RIDE, "Flat Ride or Car Ride" },
     { VEHICLE_VISUAL_LAUNCHED_FREEFALL, "Launched Freefall" },
@@ -140,12 +228,12 @@ ride_type_t sprite_groups[NUM_VISUAL_EFFECTS] = {
     { VEHICLE_VISUAL_SPLASH4_EFFECT, "Splash 4"},
     { VEHICLE_VISUAL_SPLASH5_EFFECT, "Splash 5"},
     { VEHICLE_VISUAL_VIRGINIA_REEL, "Virginia Reel"},
-    { VEHICLE_VISUAL_SUBMARINE, "Submarine"},
+    { VEHICLE_VISUAL_SUBMARINE, "Submarine"}
 };
 
-ride_type_t* sprite_group_by_index(int index)
+ride_type_t* visual_effect_by_index(int index)
 {
-    return sprite_groups + index;
+    return visual_effects + index;
 }
 
 // sprite group flags
@@ -165,7 +253,7 @@ ride_type_t sprite_groups[NUM_SPRITE_GROUPS] = {
     { SPRITE_BANKED_SLOPE_TRANSITION, "Banked Flat-To-Gentle"},
     { SPRITE_CORKSCREW, "Corkscrews"},
     { SPRITE_RESTRAINT_ANIMATION, "Animated Restraints"},
-    { SPRITE_SPIRAL LIFT, "Spiral Lift"},
+    { SPRITE_SPIRAL LIFT, "Spiral Lift"}
 };
 
 ride_type_t* sprite_group_by_index(int index)
@@ -183,7 +271,7 @@ ride_type_t running_sounds[NUM_RUNNING_SOUNDS] = {
     { RUNNING_SOUND_STEEL_SMOOTH, "Steel (Smooth)" },
     { RUNNING_SOUND_WATERSLIDE, "Waterslide" },
     { RUNNING_SOUND_TRAIN, "Train Track" },
-    { RUNNING_SOUND_ENGINE, "Gasoline Motor" },
+    { RUNNING_SOUND_ENGINE, "Gasoline Motor" }
 };
 
 ride_type_t* running_sound_by_index(int index)
@@ -199,7 +287,7 @@ ride_type_t secondary_sounds[NUM_RUNNING_SOUNDS] = {
     { SECONDARY_SOUND_SCREAMS_2, "Screams (woodie)" },
     { SECONDARY_SOUNDS_SCREAMS_3, "Screams (classic)" },
     { SECONDARY_SOUND_WHISTLE, "Steam Train Whistle" },
-    { SECONDARY_SOUND_BELL, "Tram Bell" },
+    { SECONDARY_SOUND_BELL, "Tram Bell" }
 };
 
 ride_type_t* secondary_sound_by_index(int index)
@@ -214,7 +302,7 @@ ride_type_t car_positions[NUM_CAR_POSITIONS] = {
     { CAR_INDEX_FRONT, "Front car" },
     { CAR_INDEX_SECOND, "Second car" },
     { CAR_INDEX_THIRD, "Third car" },
-    { CAR_INDEX_LAST, "Fourth car" },
+    { CAR_INDEX_LAST, "Fourth car" }
 };
 
 ride_type_t* car_position_by_index(int index)

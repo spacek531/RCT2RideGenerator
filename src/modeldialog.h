@@ -5,11 +5,6 @@
 #include "model.h"
 #include <gtk/gtk.h>
 
-#define RECOLORABLE_1 -1
-#define RECOLORABLE_2 -2
-#define RECOLORABLE_3 -3
-#define NON_RECOLORABLE -4
-
 typedef struct {
     model_t* model;
     model_t* grid;

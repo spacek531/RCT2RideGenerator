@@ -22,6 +22,19 @@ typedef enum { LANGUAGE_ENGLISH_UK = 0,
     LANGUAGE_ENGLISH_US = 1 } language_t;
 
 enum {
+    VEHICLE_ANIMATION_NONE =                        0x00u,
+    VEHICLE_ANIMATION_MINITURE_RAILWAY_LOCOMOTIVE = 0x01u,
+    VEHICLE_ANIMATION_SWAN =                        0x02u,
+    VEHICLE_ANIMATION_CANOES =                      0x03u,
+    VEHICLE_ANIMATION_ROW_BOATS =                   0x04u,
+    VEHICLE_ANIMATION_WATER_TRICYCLES =             0x05u,
+    VEHICLE_ANIMATION_OBSERVATION_TOWER =           0x06u,
+    VEHICLE_ANIMATION_HELICARS =                    0x07u,
+    VEHICLE_ANIMATION_MONORAIL_CYCLES =             0x08u,
+    VEHICLE_ANIMATION_MULTI_DIM_COASTER =           0x09u
+} car_animation_t;
+
+enum {
     RIDE_VEHICLE_TAB_SCALE_HALF =           0x00000001u,
     RIDE_NO_INVERSIONS =                    0x00000002u,
     RIDE_NO_BANKED_TRACK =                  0x00000004u,
@@ -35,7 +48,6 @@ enum {
     RIDE_COVERED =                          0x00000400u,
     RIDE_LIMIT_AIRTIME_BONUS =              0x00000800u,
     RIDE_SEPARATE_RIDE_DEPRECATED =         0x00001000u,
-    RIDE_SEPERATE =                         0x00001000u,
     RIDE_SEPARATE_RIDE =                    0x00002000u,//this enables track designs
     RIDE_CANNOT_BREAK_DOWN =                0x00004000u,
     RIDE_DISABLE_LAST_OPERATING_MODE =      0x00008000u,
@@ -45,19 +57,6 @@ enum {
     RIDE_DISABLE_COLOR_TAB =                0x00080000u,// must be set with swing mode 1;
     RIDE_ALTERNATIVE_SWING_MODE_2 =         0x00100000u
 } ride_flags_t;
-
-enum {
-    VEHICLE_ANIMATION_NONE =                        0x00u,
-    VEHICLE_ANIMATION_MINITURE_RAILWAY_LOCOMOTIVE = 0x01u,
-    VEHICLE_ANIMATION_SWAN =                        0x02u,
-    VEHICLE_ANIMATION_CANOES =                      0x03u,
-    VEHICLE_ANIMATION_ROW_BOATS =                   0x04u,
-    VEHICLE_ANIMATION_WATER_TRICYCLES =             0x05u,
-    VEHICLE_ANIMATION_OBSERVATION_TOWER =           0x06u,
-    VEHICLE_ANIMATION_HELICARS =                    0x07u,
-    VEHICLE_ANIMATION_MONORAIL_CYCLES =             0x08u,
-    VEHICLE_ANIMATION_MULTI_DIM_COASTER =           0x09u
-} car_animation_t;
 
 enum { // if you update this, make sure you update typestrings!
     CAR_COAST_AND_FLY_OFF =           0x1u,//ghost trains
@@ -75,7 +74,7 @@ enum { // if you update this, make sure you update typestrings!
     CAR_OVERRIDE_VERTICAL_FRAMES = 0x1000u,
     CAR_FLAG_13 =                  0x2000u,
     CAR_FLAG_MORE_SPIN_FRAMES =    0x4000u,
-    CAR_FLAG_15 =                  0x8000u,
+    CAR_FLAG_15 =                  0x8000u,// one of these flags plays running sounds at 2x speed!!!!
     CAR_ENABLE_REMAP2 =           0x10000u,
     CAR_IS_SWINGING =             0x20000u,
     CAR_IS_SPINNING =             0x40000u,
@@ -84,7 +83,7 @@ enum { // if you update this, make sure you update typestrings!
     CAR_FLAG_21 =                0x200000u,//related to swinging sprites - I believe this is only used for 3-frames
     CAR_BOAT_COLLISIONS =        0x400000u,
     CAR_IS_ANIMATED =            0x800000u,
-    CAR_RIDERS_ANIMATED =       0x1000000u,
+    CAR_RIDERS_MOVE =           0x1000000u,
     CAR_FLAG_25 =               0x2000000u,// related to swinging sprites?
     CAR_FLAG_26 =               0x4000000u,
     CAR_FLAG_27 =               0x8000000u,// related to swinging sprites
@@ -242,7 +241,57 @@ typedef struct {
     uint8_t maximum_cars;
     car_t cars[NUM_CARS];
 } ride_header_t;
-
+/*
+struct rct_ride_entry_vehicle {
+    uint16 rotation_frame_mask;     // 0x00 , 0x1A
+    uint8 num_vertical_frames;      // 0x02 , 0x1C, Appears to be unused, except as a temporary variable in RCT2 (not needed for OpenRCT2)
+    uint8 num_horizontal_frames;    // 0x03 , 0x1D, Appears to be unused, except as a temporary variable in RCT2 (not needed for OpenRCT2)
+    uint32 spacing;                 // 0x04 , 0x1E
+    uint16 car_mass;                // 0x08 , 0x22
+    sint8 tab_height;               // 0x0A , 0x24
+    uint8 num_seats;                // 0x0B , 0x25
+    uint16 sprite_flags;            // 0x0C , 0x26
+    uint8 sprite_width;             // 0x0E , 0x28
+    uint8 sprite_height_negative;   // 0x0F , 0x29
+    uint8 sprite_height_positive;   // 0x10 , 0x2A
+    uint8 animation;                // 0x11 , 0x2B
+    uint32 flags;                   // 0x12 , 0x2C
+    uint16 base_num_frames;         // 0x16 , 0x30, The number of sprites for a flat non-banked track piece.
+    uint32 base_image_id;           // 0x18 , 0x32, Following image_id's populated during loading
+    uint32 restraint_image_id;                      // 0x1C , 0x36
+    uint32 gentle_slope_image_id;                   // 0x20 , 0x3A
+    uint32 steep_slope_image_id;                    // 0x24 , 0x3E
+    uint32 vertical_slope_image_id;                 // 0x28 , 0x42
+    uint32 diagonal_slope_image_id;                 // 0x2C , 0x46
+    uint32 banked_image_id;                         // 0x30 , 0x4A
+    uint32 inline_twist_image_id;                   // 0x34 , 0x4E
+    uint32 flat_to_gentle_bank_image_id;            // 0x38 , 0x52
+    uint32 diagonal_to_gentle_slope_bank_image_id;  // 0x3C , 0x56
+    uint32 gentle_slope_to_bank_image_id;           // 0x40 , 0x5A
+    uint32 gentle_slope_bank_turn_image_id;         // 0x44 , 0x5E
+    uint32 flat_bank_to_gentle_slope_image_id;      // 0x48 , 0x62
+    union {
+        uint32 curved_lift_hill_image_id;           // 0x4C , 0x66
+        uint32 corkscrew_image_id;                  // 0x4C , 0x66
+    };
+    uint32 no_vehicle_images;       // 0x50 , 0x6A
+    uint8 no_seating_rows;          // 0x54 , 0x6E
+    uint8 spinning_inertia;         // 0x55 , 0x6F
+    uint8 spinning_friction;        // 0x56 , 0x70
+    uint8 friction_sound_id;        // 0x57 , 0x71
+    uint8 log_flume_reverser_vehicle_type;          // 0x58 , 0x72
+    uint8 sound_range;              // 0x59 , 0x73
+    uint8 double_sound_frequency;   // 0x5A , 0x74 (Doubles the velocity when working out the sound frequency {used on go karts})
+    uint8 powered_acceleration;     // 0x5B , 0x75
+    uint8 powered_max_speed;        // 0x5C , 0x76
+    uint8 car_visual;               // 0x5D , 0x77
+    uint8 effect_visual;
+    uint8 draw_order;
+    uint8 num_vertical_frames_override; // 0x60 , 0x7A, A custom number that can be used rather than letting RCT2 determine it. Needs the VEHICLE_ENTRY_FLAG_OVERRIDE_NUM_VERTICAL_FRAMES flag to be set.
+    sint8* peep_loading_positions;  // 0x61 , 0x7B
+    uint16 peep_loading_positions_count;
+};
+*/
 typedef struct {
     uint8_t colors[3];
 } color_scheme_t;
