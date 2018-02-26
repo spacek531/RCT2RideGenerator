@@ -37,6 +37,8 @@ typedef struct {
     uint8_t max_height;
     uint8_t car_types[5];
     car_settings_t cars[4];
+    uint8_t primary_category;
+    uint8_t secondary_category;
     image_t* preview_image;
     model_t** models;
     int num_models;

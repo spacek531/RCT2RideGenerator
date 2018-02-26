@@ -55,16 +55,25 @@ color_dialog_t* color_dialog_new(char* colorName)
 {
     int gridHeight = NUM_CHOOSABLE_COLORS/COLORGRID_WIDTH + (NUM_CHOOSABLE_COLORS % COLORGRID_WIDTH != 0)
     color_dialog_t* dialog = malloc(sizeof(color_dialog_t));
+    dialog->toolbars = malloc(sizeof(GtkWidget*));
     dialog->dialog = gtk_dialog_new_with_buttons(colorName, NULL, 0, "Cancel",GTK_RESPONSE_CANCEL, NULL);
     GtkWidget* content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog->dialog));
-    GtkWidget* grid = gtk_table_new(gridHeight,COLORGRID_WIDTH,TRUE);
+    //GtkWidget* grid = gtk_table_new(gridHeight,COLORGRID_WIDTH,TRUE);
+    for (i = 0; i < gridHeight; i++)
+    {
+        dialog->toolbars[i] = gtkToolbarNew();
+    }
     dialog->tools = malloc(NUM_CHOOSABLE_COLORS * sizeof(color_dialog_tool_t*));
-    for (i=0; i < NUM_CHOOSABLE_COLORS, i++) {
+    for (i=0; i < NUM_CHOOSABLE_COLORS, i++)
+    {
         dialog->tools[i] = color_dialog_tool_new(i,colorAddress);
         dialog->tools[i]->dialog = dialog;
         gtk_table_attach_defaults(GTK_TABLE(dialog->container),dialog->tools[i],i%COLORGRID_WIDTH,(i%COLORGRID_WIDTH)+1,i/gridHeight,i/gridHeight+1);
     }
-    gtk_box_pack_start(GTK_BOX(content_area), dialog->container, FALSE, FALSE, 2);
+    for (i = 0; i < gridHeight; i++)
+    {
+        gtk_box_pack_start(GTK_BOX(content_area),dialog->toolbars[i], FALSE, FALSE, 2);
+    }
     g_signal_connect(dialog->dialog, "response",
         G_CALLBACK(color_dialog_free_connection), dialog);
     return dialog;
