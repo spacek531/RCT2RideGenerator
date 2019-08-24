@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+int hasloaded = 0;
+animation_t* frames = animation_new();// for hotswapping things per-frame (I HOPE THE MEMORY GETS CLEANED UP WHEN THE PROGRAM STOPS)
+
 project_t* project_new()
 {
     int i;
@@ -37,6 +40,7 @@ project_t* project_new()
     project->preview_image = image_new(112, 112, 0);
     project->id = rand();
 	project->track_sections = 0xFFFFFFFFFFFFFFFFl;
+	
 
     for (i = 0; i < NUM_CARS; i++) {
         project->cars[i].animation = animation_new();
@@ -62,6 +66,8 @@ project_t* project_new()
 		project->cars[i].double_sound_frequency = 0;
 		memset(project->cars[i].unknown, 0, 9);
     }
+	
+	
     return project;
 }
 void project_add_model(project_t* project, model_t* model)
@@ -170,6 +176,7 @@ void render_rotation(image_list_t* image_list,
 
         for (int frame = 0; frame < sprites_per_view; frame++) {//this assumes swinging and animation is mutually exclusive
 		    renderer_clear_buffers();
+			animation->objects[5] = frames[frame] //made specifically for bicycles
             render_data_t render_data = animation_split_render_begin(animation, MatrixMultiply(rotation_matrix, transform_matrix),variables);
             for (int image = 0; image < images; image++) {
                 image_list_set_image(image_list,base_frame + image * sprites_per_image + view * sprites_per_view + frame,renderer_get_image());
@@ -204,7 +211,7 @@ void render_loading(image_list_t* image_list,
     for (int anim_frame = 0; anim_frame < 3; anim_frame++) {
         variables[VAR_RESTRAINT] += 0.25;
         variables[VAR_YAW] = 0;
-		printf("var_restraint is %i\n", variables[VAR_RESTRAINT]);
+//		printf("var_restraint is %i\n", variables[VAR_RESTRAINT]);
         for (int i = 0; i < 4; i++) {
             renderer_clear_buffers();
             render_data_t render_data = animation_split_render_begin(animation, rotation_matrix, variables);
@@ -658,6 +665,13 @@ object_t* project_export_dat(project_t* project)
     object_t* object = object_new_ride();
 
     object->ride_header->track_style = project->track_type;
+	
+	if (hasloaded == 0) {
+		hasloaded++
+		for (i = 6; i < project->num_models; i++) {
+			animation_add_new_object(frames,project->models[i])
+		}
+	}
 
     // Set strings
     char capacity[256];
