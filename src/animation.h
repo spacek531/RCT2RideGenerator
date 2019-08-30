@@ -66,6 +66,7 @@ typedef struct {
     animation_object_t* objects[ANIMATION_MAX_OBJECTS];
 } animation_t;
 
+animation_object_t* animation_object_new();
 animation_expression_t* animation_expression_new();
 void animation_expression_free(animation_expression_t* expr);
 void animation_expression_parse(animation_expression_t* expr,
