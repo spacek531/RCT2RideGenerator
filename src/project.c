@@ -179,6 +179,7 @@ void render_rotation(image_list_t* image_list,
 					if (animation->objects[m]->model == project->models[n]) {break;}
 				}
 				if (n < 4) {
+					//printf("found model %i, replacing with model %i\n", n,(n+1)%4);
 					animation->objects[m]->model = project->models[(n+1)%4];
 				}
 			}
