@@ -173,7 +173,15 @@ void render_rotation(image_list_t* image_list,
 
         for (int frame = 0; frame < sprites_per_view; frame++) {//this assumes swinging and animation is mutually exclusive
 		    renderer_clear_buffers();
-			animation->objects[5]->model = project->models[frame+6]; //made specifically for bicycles
+			int n;
+			for (int m = 0; m < animation->num_objects; m++) {
+				for (n = 0; n < project->num_models; n++) {
+					if (animation->objects[m]->model == project->models[n]) {break;}
+				}
+				if (n < 4) {
+					animation->objects[m]->model = project->models[(n+1)%4];
+				}
+			}
             render_data_t render_data = animation_split_render_begin(animation, MatrixMultiply(rotation_matrix, transform_matrix),variables);
             for (int image = 0; image < images; image++) {
                 image_list_set_image(image_list,base_frame + image * sprites_per_image + view * sprites_per_view + frame,renderer_get_image());
