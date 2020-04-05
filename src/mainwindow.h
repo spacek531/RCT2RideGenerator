@@ -39,14 +39,14 @@ typedef struct { // changes the track type of the ride
 } track_type_editor_t;
 
 typedef struct { // changes a single flag
-    uint32_t* flags;
-    uint32_t flag;
+    uint64_t* flags;
+    uint64_t flag;
     GtkWidget* label;
     GtkWidget* checkbox;
 } flag_checkbox_t;
 
 typedef struct { // changes various flags
-    uint32_t* flags;
+    uint64_t* flags;
     flag_checkbox_t** flag_checkboxes;
     int num_checkboxes;
 
@@ -137,6 +137,7 @@ typedef struct { // edits train configuration
 	car_type_editor_t* second_car_editor;
 	car_type_editor_t* third_car_editor;
 	car_type_editor_t* rear_car_editor;
+    flag_editor_t* track_sections_editor;
 	GtkWidget* container;
 } center_panel_t;
 

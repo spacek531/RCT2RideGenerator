@@ -36,7 +36,7 @@ project_t* project_new()
     project->num_models = 0;
     project->preview_image = image_new(112, 112, 0);
     project->id = rand();
-	project->track_sections = 0xFFFFFFFFFFFFFFFFl;
+	project->track_sections = DEFAULT_TRACK_SECTIONS;
 
     for (i = 0; i < NUM_CARS; i++) {
         project->cars[i].animation = animation_new();
@@ -700,7 +700,7 @@ object_t* project_export_dat(project_t* project)
     // Set categories
     object->ride_header->categories[0] = project->ride_categories[0];
     object->ride_header->categories[1] = project->ride_categories[1];
-    object->ride_header->track_sections = 0xFFFFFFFFFFFFFFFFl;//refer to dat.h for what flags are what
+    object->ride_header->track_sections = project->track_sections;//refer to dat.h for what flags are what
 
     object->ride_header->minimum_cars = project->minimum_cars;
     object->ride_header->maximum_cars = project->maximum_cars;
