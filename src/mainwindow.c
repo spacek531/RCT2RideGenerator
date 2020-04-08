@@ -93,7 +93,7 @@ flag_editor_t* flag_editor_new(const char* label)
 }
 void flag_editor_add_checkbox(flag_editor_t* editor,
     const char* label,
-    uint32_t flag)
+    uint64_t flag)
 {
     editor->flag_checkboxes = realloc(editor->flag_checkboxes,
         (editor->num_checkboxes + 1) * sizeof(flag_checkbox_t*));
@@ -630,33 +630,23 @@ center_panel_t* center_panel_new()
     // track_sections editor
 
     editor->track_sections_editor = flag_editor_new("Track Sections"); // MAKING THE RIDE FLAG EDITOR
-    flag_editor_add_checkbox(editor->track_sections_editor, "Station section",
-        TRACK_STATION);
     flag_editor_add_checkbox(editor->track_sections_editor, "Brake section",
-        TRACK_BRAKES);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Block brake section",
-        TRACK_BLOCK_BRAKES);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Straight section",
-        TRACK_STRAIGHT);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Small curve",
+        TRACK_BRAKES & TRACK_BLOCK_BRAKES);
+    flag_editor_add_checkbox(editor->track_sections_editor, "Tiny curve",
         TRACK_TINY_TURNS);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Medium curve",
+    flag_editor_add_checkbox(editor->track_sections_editor, "Small curve",
         TRACK_SMALL_TURN);
     flag_editor_add_checkbox(editor->track_sections_editor, "Large curve",
         TRACK_LARGE_TURN);
     flag_editor_add_checkbox(editor->track_sections_editor, "S-bend",
         TRACK_S_BEND);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Banked turns",
+    flag_editor_add_checkbox(editor->track_sections_editor, "Banked curves",
         TRACK_BANKING);
     flag_editor_add_checkbox(editor->track_sections_editor, "Helixes",
-        TRACK_HELIX);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Quarter helixes",
-        TRACK_QUARTER_HELIX);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Quarter helix (unbanked)",
-        TRACK_UNBANKED_QUARTER_HELIX);
+        TRACK_HELIX & TRACK_QUARTER_HELIX & TRACK_UNBANKED_QUARTER_HELIX);
     flag_editor_add_checkbox(editor->track_sections_editor, "Gentle slope",
         TRACK_GENTLE_SLOPE);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Gentle sloped curve",
+    flag_editor_add_checkbox(editor->track_sections_editor, "Gentle sloped curves",
         TRACK_SLOPED_TURNS);
     flag_editor_add_checkbox(editor->track_sections_editor, "Banked gentle slopes",
         TRACK_GENTLE_SLOPE_BANKING);
@@ -671,11 +661,9 @@ center_panel_t* center_panel_new()
     flag_editor_add_checkbox(editor->track_sections_editor, "Vertical sloped curve",
         TRACK_VERTICAL_SLOPED_TURNS);
     flag_editor_add_checkbox(editor->track_sections_editor, "Chainlift",
-        TRACK_CHAIN_LIFT);
+        TRACK_CHAIN_LIFT & TRACK_TIRE_DRIVE_LIFT);
     flag_editor_add_checkbox(editor->track_sections_editor, "Steep chainlift",
         TRACK_STEEP_CHAIN_LIFT);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Tire drive lift",
-        TRACK_TIRE_DRIVE_LIFT);
     flag_editor_add_checkbox(editor->track_sections_editor, "Cable lifthill",
         TRACK_CABLE_LIFT);
     flag_editor_add_checkbox(editor->track_sections_editor, "Spiral lifthill",
@@ -694,10 +682,8 @@ center_panel_t* center_panel_new()
         TRACK_LARGE_HALF_LOOP);
     flag_editor_add_checkbox(editor->track_sections_editor, "Corkscrew",
         TRACK_HALF_CORKSCREW);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Inline twist",
-        TRACK_INLINE_TWIST);
     flag_editor_add_checkbox(editor->track_sections_editor, "Barrel roll",
-        TRACK_BARREL_ROLL);
+        TRACK_INLINE_TWIST & TRACK_BARREL_ROLL);
     flag_editor_add_checkbox(editor->track_sections_editor, "Quarter-loop",
         TRACK_QUARTER_LOOP);
     flag_editor_add_checkbox(editor->track_sections_editor, "Heartline roll",
@@ -708,27 +694,20 @@ center_panel_t* center_panel_new()
         TRACK_SPINNING_TOGGLE);
     flag_editor_add_checkbox(editor->track_sections_editor, "Rapids / Log bumps",
         TRACK_RAPIDS);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Logflume reverser",
-        TRACK_REVERSER_TURNTABLE);
     flag_editor_add_checkbox(editor->track_sections_editor, "Spinning tunnel",
         TRACK_SPINNING_TUNNEL);
     flag_editor_add_checkbox(editor->track_sections_editor, "Reversing section",
-        TRACK_REVERSER);
+        TRACK_REVERSER & TRACK_REVERSER_TURNTABLE);
     flag_editor_add_checkbox(editor->track_sections_editor, "Water Splash (wooden RC)",
         TRACK_WATER_SPLASH);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Flat-to-vertical-up",
-        TRACK_FLAT_TO_VERTICAL_SLOPE);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Vertical-down-to-flat",
-        TRACK_VERTICAL_TO_FLAT);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Vertical tower",
-        TRACK_VERTICAL_TOWER);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Invert transition half-loop",
-        TRACK_HALF_LOOP_INVERT & TRACK_HALF_LOOP_UNINVERT);
+    flag_editor_add_checkbox(editor->track_sections_editor, "Flat-to-vertical-slope",
+        TRACK_FLAT_TO_VERTICAL_SLOPE & TRACK_VERTICAL_TO_FLAT);
+    flag_editor_add_checkbox(editor->track_sections_editor, "Invert transition loops",
+        TRACK_HALF_LOOP_INVERT & TRACK_HALF_LOOP_UNINVERT & TRACK_QUARTER_LOOP_INVERT & TRACK_QUARTER_LOOP_UNINVERT);
     flag_editor_add_checkbox(editor->track_sections_editor, "Invert transition inline twist",
         TRACK_INLINE_TWIST_INVERT & TRACK_INLINE_TWIST_UNINVERT);
-    flag_editor_add_checkbox(editor->track_sections_editor, "Invert transition quarter-loop",
-        TRACK_QUARTER_LOOP_INVERT & TRACK_QUARTER_LOOP_UNINVERT);
 
+    gtk_box_pack_start(GTK_BOX(editor->container), editor->track_sections_editor->container, FALSE, FALSE, 2);
 	return editor;
 }
 void center_panel_set_project(center_panel_t* editor, project_t* project)
