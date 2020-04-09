@@ -755,9 +755,9 @@ object_t* project_export_dat(project_t* project)
             }
             if (project->cars[i].flags & CAR_IS_ANIMATED) {
                 object->ride_header->cars[i].animation_type = project->cars[i].animation_type;
-                object->ride_header->cars[i].animation_speed_modifier = (int8_t)log(project->cars[i].animation_type)*ANIMATION_SPEED_POWER_COEFFICIENT; // represents range of [1/16,16) as a signed 8 bit integer
-                object->ride_header->cars[i].steam_effect_modifier[0] = (int8_t)project->cars[i].steam_effect_modifier[0]*ANIMATION_SMOKE_MODIFIER_COEFFICENT;
-                object->ride_header->cars[i].steam_effect_modifier[1] = (int8_t)project->cars[i].steam_effect_modifier[1]*ANIMATION_SMOKE_MODIFIER_COEFFICENT;
+                object->ride_header->cars[i].animation_speed_modifier = (int8_t) (log(project->cars[i].animation_speed_modifier)*ANIMATION_SPEED_POWER_COEFFICIENT); // represents range of [1/16,16) as a signed 8 bit integer
+                object->ride_header->cars[i].steam_effect_modifier[0] = (int8_t) (project->cars[i].steam_effect_modifier[0]*ANIMATION_SMOKE_MODIFIER_COEFFICENT);
+                object->ride_header->cars[i].steam_effect_modifier[1] = (int8_t) (project->cars[i].steam_effect_modifier[1]*ANIMATION_SMOKE_MODIFIER_COEFFICENT);
                 printf("animation speed modifier %i, steam effect X %i, steam effect Y %i\n",object->ride_header->cars[i].animation_speed_modifier,object->ride_header->cars[i].steam_effect_modifier[0],object->ride_header->cars[i].steam_effect_modifier[1]);
             }
             if (project->cars[i].flags & CAR_IS_SPINNING) {
