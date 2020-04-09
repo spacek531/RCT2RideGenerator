@@ -242,8 +242,8 @@ ride_header_t* ride_header_load(uint8_t* bytes, uint32_t* pos_ptr)
         car->sprites = *((uint16_t*)(car_data + 12));
         /*Load rider sprites*/
         car->rider_sprites = car_data[84];
-		/*Load animation type*/
-		car->animation_type = car_data[17];
+        /*Load animation type*/
+        car->animation_type = car_data[17];
         /*Load flags*/
         car->flags = *((uint32_t*)(car_data + 18));
         /*Load spin parameters*/
@@ -318,46 +318,39 @@ void ride_header_write(ride_header_t* header, buffer_t* buffer)
     uint8_t* car_data = header_bytes + 26;
     for (i = 0; i < NUM_CARS; i++) {
         car_t* car = header->cars + i;
-        /*Write highest rotation index*/
-        car_data[0] = car->highest_rotation_index;
-        /*Write spacing*/
-        *((uint32_t*)(car_data + 4)) = car->spacing;
-        /*Write friction*/
-        *((uint16_t*)(car_data + 8)) = car->friction;
-        /*Write riders*/
-        car_data[11] = car->rider_pairs | car->riders;
-        /*Write sprite flags*/
-        *((uint16_t*)(car_data + 12)) = car->sprites;
-        /*Write rider sprites*/
-        car_data[84] = car->rider_sprites;
-		/*Write animation type*/
-		car_data[17] = car->animation_type;
-        /*Write flags*/
-        *((uint32_t*)(car_data + 18)) = car->flags;
-        /*Write spin parameters*/
-        car_data[85] = car->spin_inertia;
-        car_data[86] = car->spin_friction;
-        /*Write sound effects*/
-        car_data[87] = car->running_sound;
-		car_data[88] = car->logflume_reverser_vehicle;
-        car_data[89] = car->secondary_sound;
-		car_data[90] = car->double_sound_frequency;
-
-        /*Write powered velocity*/
-        car_data[91] = car->powered_acceleration;
-        car_data[92] = car->powered_velocity;
-        /*Write Z value*/
-        car_data[95] = car->z_value;
-        /*Write unknown fields*/
-		car_data[93] = car->car_visual;
-        car_data[94] = car->effect_visual;// splash types: 0x01 no splash, 0x0B river rafts 0x0C log flume 0x0D splash boats
-        *((uint16_t*)(car_data + 96)) = car->unknown[1];
-        car_data[10] = (uint8_t)car->unknown[4];
-        car_data[14] = (uint8_t)car->unknown[5];
-        car_data[15] = (uint8_t)car->unknown[6];
-        car_data[16] = (uint8_t)car->unknown[7];
-        /*Move to next car*/
-        car_data += 101;
+        // commented names are OpenRCT2 source names
+        *((uint16_t*)(car_data + 0x00)) = car->highest_rotation_index; //rotation_frame_mask
+        car_data[0x02] = 0x00; // num_vertical_frames
+        car_data[0x03] = 0x00; // num_horizontal frames
+        *((uint32_t*)(car_data + 0x04)) = car->spacing; // spacing
+        *((uint16_t*)(car_data + 0x08)) = car->friction;// car_mass
+        car_data[0x0A] = (uint8_t)car->unknown[4];        // tab_height
+        car_data[0x0B] = car->rider_pairs | car->riders;// num_seats
+        *((uint16_t*)(car_data + 0x0C)) = car->sprites; // sprite_flags
+        car_data[0x0E] = (uint8_t)car->unknown[5];        // sprite_width
+        car_data[0x0F] = (uint8_t)car->unknown[6];        // sprite_height_negative
+        car_data[0x10] = (uint8_t)car->unknown[7];        // sprite_height_positive
+        car_data[0x11] = car->animation_type;            // animation
+        *((uint32_t*)(car_data + 0x12)) = car->flags;    // flags
+                                                        // 0x16 thru 0x4C are loaded in game
+        car_data[0x54] = car->rider_sprites;            // no_seating_rows
+        car_data[0x55] = car->spin_inertia;                // spinning_inertia
+        car_data[0x56] = car->spin_friction;            // spinning_friction
+        car_data[0x57] = car->running_sound;            // friction_sound_id
+        car_data[0x58] = car->logflume_reverser_vehicle; // logflume_reverser_vehicle_type
+        car_data[0x59] = car->secondary_sound;            // sound_range
+        car_data[0x5A] = car->double_sound_frequency;    // double_sound_frequency
+        car_data[0x5B] = car->powered_acceleration;        // powered_acceleration
+        car_data[0x5C] = car->powered_velocity;            // powered_max_speed
+        car_data[0x5D] = car->car_visual;                // car_visual
+        car_data[0x5E] = car->effect_visual;            // effect_visual
+        car_data[0x5F] = car->z_value;                    // draw_order
+        *((uint16_t*)(car_data + 0x60)) = car->unknown[1]; // num_vertical_frames_override
+                                                        // peep_loading_waypoint_segments
+        car_data[0x62] = car->animation_speed_modifier;    // animation_speed_modifier
+        car_data[0x63] = car->steam_effect_modifier[0]; // steam_effect_modifier
+        car_data[0x64] = car->steam_effect_modifier[1]; // steam_effect_modifier
+        car_data += 0x65;
     }
     buffer_write(buffer, header_bytes, 0x1C2);
 }

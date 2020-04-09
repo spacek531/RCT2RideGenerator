@@ -70,7 +70,7 @@ typedef struct { // changes one of the two ride categories
 } ride_category_editor_t;
 
 typedef struct { // holds the 2 ride category editors
-	ride_category_editor_t** category_editors;
+    ride_category_editor_t** category_editors;
     GtkWidget* container;
 } categories_editor_t;
 
@@ -86,73 +86,78 @@ typedef struct { // edits a single car at a time
     value_editor_t* friction_editor;
     value_editor_t* z_value_editor;
 
-	value_editor_t* spin_inertia_editor;
-	value_editor_t* spin_friction_editor;
-	value_editor_t* powered_acceleration_editor;
-	value_editor_t* powered_velocity_editor;
-	value_editor_t* car_visual_editor;
-	value_editor_t* effect_visual_editor;
+    value_editor_t* spin_inertia_editor;
+    value_editor_t* spin_friction_editor;
+    value_editor_t* powered_acceleration_editor;
+    value_editor_t* powered_velocity_editor;
+    value_editor_t* car_visual_editor;
+    value_editor_t* effect_visual_editor;
+
+    value_selector_t* animation_type_editor;
+    float_editor_t* animation_speed_modifier;
+    float_editor_t* steam_effect_modifier_X;
+    float_editor_t* steam_effect_modifier_Z;
 
     GtkWidget* animation_button;
     GtkWidget* container;
-	GtkWidget* left_vbox;
-	GtkWidget* right_vbox;
+    GtkWidget* left_vbox;
+    GtkWidget* right_vbox;
 } car_editor_t;
 
 
 typedef struct {
-	image_t** image;
+    image_t** image;
 
-	image_viewer_t* preview_viewer;
-	GtkWidget* set_preview;
-	GtkWidget* container;
+    image_viewer_t* preview_viewer;
+    GtkWidget* set_preview;
+    GtkWidget* container;
 } preview_editor_t;
 
 
 typedef struct { // edits major ride properties
-	project_t* project;
+    project_t* project;
 
-	preview_editor_t* preview_editor;
-	string_editor_t* name_editor;
-	string_editor_t* description_editor;
-	track_type_editor_t* track_type_editor;
-	categories_editor_t* categories_editor;
-	flag_editor_t* flag_editor;
-	GtkWidget* container;
+    preview_editor_t* preview_editor;
+    string_editor_t* name_editor;
+    string_editor_t* description_editor;
+    track_type_editor_t* track_type_editor;
+    categories_editor_t* categories_editor;
+    flag_editor_t* flag_editor;
+    GtkWidget* container;
 } left_panel_t;
 
 typedef struct { // edits train configuration
-	project_t* project;
+    project_t* project;
 
-	value_editor_t* excitement_editor;
-	value_editor_t* intensity_editor;
-	value_editor_t* nausea_editor;
-	value_editor_t* max_height_editor;
-	value_editor_t* min_cars_editor;
-	value_editor_t* max_cars_editor;
-	value_editor_t* zero_cars_editor;
-	value_editor_t* car_icon_index_editor;
-	car_type_editor_t* default_car_editor;
-	car_type_editor_t* front_car_editor;
-	car_type_editor_t* second_car_editor;
-	car_type_editor_t* third_car_editor;
-	car_type_editor_t* rear_car_editor;
-	GtkWidget* container;
+    value_editor_t* excitement_editor;
+    value_editor_t* intensity_editor;
+    value_editor_t* nausea_editor;
+    value_editor_t* max_height_editor;
+    value_editor_t* min_cars_editor;
+    value_editor_t* max_cars_editor;
+    value_editor_t* zero_cars_editor;
+    value_editor_t* car_icon_index_editor;
+    car_type_editor_t* default_car_editor;
+    car_type_editor_t* front_car_editor;
+    car_type_editor_t* second_car_editor;
+    car_type_editor_t* third_car_editor;
+    car_type_editor_t* rear_car_editor;
+    GtkWidget* container;
 } center_panel_t;
 
 typedef struct { // edits individual cars
-	project_t* project;
+    project_t* project;
 
-	car_editor_t* car_editors[NUM_CARS];
-	GtkWidget* container;
+    car_editor_t* car_editors[NUM_CARS];
+    GtkWidget* container;
 } right_panel_t;
 
 typedef struct {
     project_t* project;
 
-	left_panel_t* left_panel;
-	center_panel_t* center_panel;
-	right_panel_t* right_panel;
+    left_panel_t* left_panel;
+    center_panel_t* center_panel;
+    right_panel_t* right_panel;
 
     GtkWidget* window;
     GtkWidget* main_menu;
@@ -161,8 +166,8 @@ typedef struct {
     GtkWidget* main_vbox;
     GtkWidget* main_hbox;
     GtkWidget* left_vbox;
-	GtkWidget* center_vbox;
-	GtkWidget* right_vbox;
+    GtkWidget* center_vbox;
+    GtkWidget* right_vbox;
 
 } main_window_t;
 

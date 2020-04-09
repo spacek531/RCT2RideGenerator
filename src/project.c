@@ -12,8 +12,8 @@ project_t* project_new()
     project->description = malloc(15);
     strcpy(project->name, "Unnamed ride");
     strcpy(project->description, "No description");
-	project->ride_categories[0]=CATEGORY_ROLLERCOASTER;
-	project->ride_categories[1]=CATEGORY_NONE;
+    project->ride_categories[0]=CATEGORY_ROLLERCOASTER;
+    project->ride_categories[1]=CATEGORY_NONE;
     project->num_color_schemes = 0;
     for (i = 0; i < MAX_COLOR_SCHEMES; i++) {
         project->color_schemes[i].colors[0] = 0;
@@ -36,7 +36,7 @@ project_t* project_new()
     project->num_models = 0;
     project->preview_image = image_new(112, 112, 0);
     project->id = rand();
-	project->track_sections = 0xFFFFFFFFFFFFFFFFl;
+    project->track_sections = 0xFFFFFFFFFFFFFFFFl;
 
     for (i = 0; i < NUM_CARS; i++) {
         project->cars[i].animation = animation_new();
@@ -47,20 +47,23 @@ project_t* project_new()
         project->cars[i].secondary_sound = SECONDARY_SOUND_NONE;
         project->cars[i].z_value = 5;
         project->cars[i].friction = 0x2A8;
-		project->cars[i].car_visual = 0;
+        project->cars[i].car_visual = 0;
 
-		// stuff related to the .DAT
-		project->cars[i].effect_visual = 1;
-		project->cars[i].rider_pairs = 0;
-		project->cars[i].riders = 0;
-		project->cars[i].rider_sprites = 0;
-		project->cars[i].spin_inertia = 0;
-		project->cars[i].spin_friction = 0;
-		project->cars[i].powered_acceleration = 0;
-		project->cars[i].powered_velocity = 0;
-		project->cars[i].logflume_reverser_vehicle = 0;
-		project->cars[i].double_sound_frequency = 0;
-		memset(project->cars[i].unknown, 0, 9);
+        // stuff related to the .DAT
+        project->cars[i].effect_visual = 1;
+        project->cars[i].rider_pairs = 0;
+        project->cars[i].riders = 0;
+        project->cars[i].rider_sprites = 0;
+        project->cars[i].spin_inertia = 0;
+        project->cars[i].spin_friction = 0;
+        project->cars[i].powered_acceleration = 0;
+        project->cars[i].powered_velocity = 0;
+        project->cars[i].logflume_reverser_vehicle = 0;
+        project->cars[i].double_sound_frequency = 0;
+        project->cars[i].animation_speed_modifier = 1;
+        project->cars[i].steam_effect_modifier[0] = 1;
+        project->cars[i].steam_effect_modifier[1] = 1;
+        memset(project->cars[i].unknown, 0, 9);
     }
     return project;
 }
@@ -136,9 +139,9 @@ int count_sprites_per_view(uint32_t flags, uint8_t animation_type)
 
 
 void render_rotation(image_list_t* image_list,
-	animation_t* animation,
-	uint32_t flags,
-	uint8_t animation_type,
+    animation_t* animation,
+    uint32_t flags,
+    uint8_t animation_type,
     int base_frame,
     int sprites_per_image,
     int images,
@@ -169,7 +172,7 @@ void render_rotation(image_list_t* image_list,
         variables[VAR_SWING]=0.0;
 
         for (int frame = 0; frame < sprites_per_view; frame++) {//this assumes swinging and animation is mutually exclusive
-		    renderer_clear_buffers();
+            renderer_clear_buffers();
             render_data_t render_data = animation_split_render_begin(animation, MatrixMultiply(rotation_matrix, transform_matrix),variables);
             for (int image = 0; image < images; image++) {
                 image_list_set_image(image_list,base_frame + image * sprites_per_image + view * sprites_per_view + frame,renderer_get_image());
@@ -185,9 +188,9 @@ void render_rotation(image_list_t* image_list,
     }
 }
 void render_loading(image_list_t* image_list,
-	animation_t* animation,
-	uint32_t flags,
-	uint8_t animation_type,
+    animation_t* animation,
+    uint32_t flags,
+    uint8_t animation_type,
     int base_frame,
     int sprites_per_image,
     int images)
@@ -204,7 +207,7 @@ void render_loading(image_list_t* image_list,
     for (int anim_frame = 0; anim_frame < 3; anim_frame++) {
         variables[VAR_RESTRAINT] += 0.25;
         variables[VAR_YAW] = 0;
-		printf("var_restraint is %i\n", variables[VAR_RESTRAINT]);
+        printf("var_restraint is %i\n", variables[VAR_RESTRAINT]);
         for (int i = 0; i < 4; i++) {
             renderer_clear_buffers();
             render_data_t render_data = animation_split_render_begin(animation, rotation_matrix, variables);
@@ -721,14 +724,11 @@ object_t* project_export_dat(project_t* project)
             cars_used[project->car_types[i]] = 1;
     for (i = 0; i < NUM_CARS; i++) {
         if (cars_used[i] || project->cars[i].flags & CAR_CAN_INVERT) {
-            // printf("%d %d %d %d
-            // %d\n",object->ride_header->cars[i].unknown[0],object->ride_header->cars[i].unknown[1],object->ride_header->cars[i].unknown[2],object->ride_header->cars[i].unknown[3],object->ride_header->cars[i].unknown[4]);
             object->ride_header->cars[i].highest_rotation_index = 31;
-			object->ride_header->cars[i].car_visual = project->cars[i].car_visual;
-			object->ride_header->cars[i].effect_visual = project->cars[i].effect_visual;
+            object->ride_header->cars[i].car_visual = project->cars[i].car_visual;
+            object->ride_header->cars[i].effect_visual = project->cars[i].effect_visual;
             object->ride_header->cars[i].flags = project->cars[i].flags;
             // Enable all extra swinging frames
-        // printf("flags %x\n",project->cars[i].flags);
             //if (!project->cars[i].flags & CAR_CAN_INVERT /*|| i%2==0*/) object->ride_header->cars[i].flags |= CAR_FLAG_13;//this is only set on the above trains for some reason.
             //if (project->cars[i].flags & CAR_IS_SWINGING) {
                 //see RideObject.cpp for details
@@ -750,20 +750,21 @@ object_t* project_export_dat(project_t* project)
                 //object->ride_header->cars[i].extra_swing_frames = 0x08; //this is 1<<27 (enables 13 frames instead of 7)
             //}
             if (project->cars[i].flags & CAR_IS_POWERED) {
-				object->ride_header->cars[i].powered_velocity = project->cars[i].powered_velocity;
+                object->ride_header->cars[i].powered_velocity = project->cars[i].powered_velocity;
                 object->ride_header->cars[i].powered_acceleration = project->cars[i].powered_acceleration;
             }
             if (project->cars[i].flags & CAR_IS_ANIMATED) {
                 object->ride_header->cars[i].animation_type = project->cars[i].animation_type;
+                object->ride_header->cars[i].animation_speed_modifier = (int8_t)log(project->cars[i].animation_type)*ANIMATION_SPEED_POWER_COEFFICIENT; // represents range of [1/16,16) as a signed 8 bit integer
+                object->ride_header->cars[i].steam_effect_modifier[0] = (int8_t)project->cars[i].steam_effect_modifier[0]*ANIMATION_SMOKE_MODIFIER_COEFFICENT;
+                object->ride_header->cars[i].steam_effect_modifier[1] = (int8_t)project->cars[i].steam_effect_modifier[1]*ANIMATION_SMOKE_MODIFIER_COEFFICENT;
+                printf("animation speed modifier %i, steam effect X %i, steam effect Y %i\n",object->ride_header->cars[i].animation_speed_modifier,object->ride_header->cars[i].steam_effect_modifier[0],object->ride_header->cars[i].steam_effect_modifier[1]);
             }
             if (project->cars[i].flags & CAR_IS_SPINNING) {
                 object->ride_header->cars[i].spin_inertia = project->cars[i].spin_inertia;
                 object->ride_header->cars[i].spin_friction = project->cars[i].spin_friction;
             }
-        // printf("flags of car %x: %x %x\n",i,object->ride_header->cars[i].flags,object->ride_header->cars[i].extra_swing_frames);
-
-            // object->ride_header->cars[i].flags |= CAR_COASTING_POWER;
-
+            
             object->ride_header->cars[i].friction = project->cars[i].friction;
             object->ride_header->cars[i].spacing = project->cars[i].spacing;
             object->ride_header->cars[i].running_sound = project->cars[i].running_sound;

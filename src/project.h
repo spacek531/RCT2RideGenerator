@@ -12,50 +12,53 @@ typedef struct { // moving the car_t properties here for better WYSIWYG (do-able
     animation_t* animation;
     uint32_t flags;
     uint32_t sprites;
-	uint32_t render_sprites;
+    uint32_t render_sprites;
     uint32_t spacing;
     uint16_t friction;
     uint8_t running_sound;
     uint8_t secondary_sound;
-	uint8_t animation_type;
-	uint8_t car_visual;// set to 0 by default
-	uint8_t effect_visual;// set to 1 by default
+    uint8_t animation_type;
+    uint8_t car_visual;// set to 0 by default
+    uint8_t effect_visual;// set to 1 by default
     uint8_t z_value;
-	uint8_t spin_inertia;
-	uint8_t spin_friction;
-	uint8_t powered_acceleration;
-	uint8_t powered_velocity;
-	uint8_t logflume_reverser_vehicle;
-	uint8_t double_sound_frequency;
+    uint8_t spin_inertia;
+    uint8_t spin_friction;
+    uint8_t powered_acceleration;
+    uint8_t powered_velocity;
+    uint8_t logflume_reverser_vehicle;
+    uint8_t double_sound_frequency;
 
 
-	uint8_t highest_rotation_index; // not for editing by mere mortals
-	uint8_t rider_pairs;
-	uint8_t riders;
-	uint8_t rider_sprites;
-	uint16_t unknown[9];
+    uint16_t highest_rotation_index; // not for editing by mere mortals
+    uint8_t rider_pairs;
+    uint8_t riders;
+    uint8_t rider_sprites;
+    float animation_speed_modifier;
+    float steam_effect_modifier[2];
+    
+    uint16_t unknown[9];
 } car_settings_t;
 
 typedef struct {
     char* name;
     char* description;
     color_scheme_t color_schemes[16];
-	int color_scheme_override; // set to 255 to indicate the ride has different colors for each train
-	uint32_t id;
+    int color_scheme_override; // set to 255 to indicate the ride has different colors for each train
+    uint32_t id;
     uint32_t num_color_schemes;
-	uint64_t track_sections;
+    uint64_t track_sections;
     uint32_t flags;
     uint8_t car_icon_index;
-	uint8_t zero_cars;
-	uint8_t track_type;
-	uint8_t excitement;
-	uint8_t intensity;
-	uint8_t nausea;
-	uint8_t max_height;
-	uint8_t ride_categories[2];
-	uint8_t car_types[5];
-	uint8_t minimum_cars;
-	uint8_t maximum_cars;
+    uint8_t zero_cars;
+    uint8_t track_type;
+    uint8_t excitement;
+    uint8_t intensity;
+    uint8_t nausea;
+    uint8_t max_height;
+    uint8_t ride_categories[2];
+    uint8_t car_types[5];
+    uint8_t minimum_cars;
+    uint8_t maximum_cars;
     car_settings_t cars[4];
     image_t* preview_image;
     model_t** models;

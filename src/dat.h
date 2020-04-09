@@ -37,6 +37,9 @@
 #define CORKSCREW_LEFT_PITCH(angle) (-CORKSCREW_RIGHT_PITCH(-angle))
 #define CORKSCREW_LEFT_ROLL(angle) (-CORKSCREW_RIGHT_ROLL(angle))
 
+#define ANIMATION_SPEED_POWER_COEFFICIENT 32/log(2) //conversion factor in OpenRCT2: pow(2,animation_speed_modifier / 32)
+#define ANIMATION_SMOKE_MODIFIER_COEFFICENT 32 // conversion factor in OpenRCT2: animation_smoke_modifier / 32
+
 typedef enum {
     STRING_TABLE_NAME = 0,
     STRING_TABLE_DESCRIPTION = 1,
@@ -68,24 +71,23 @@ enum {
     RIDE_DISABLE_DOOR_CONSTRUCTION =         0x40000u,
     RIDE_DISABLE_COLOR_TAB =                 0x80000u,
     RIDE_ALTERNATIVE_SWING_MODE_2 =         0x100000u,
-	
-    RIDE_WET =                      0x100u,
-    RIDE_SLOW_IN_WATER =            0x200u,
-    RIDE_SEPERATE =                 0x1000u
-    // from showing in the window
+    
+    RIDE_WET =                                 0x100u,
+    RIDE_SLOW_IN_WATER =                       0x200u,
+    RIDE_SEPERATE =                           0x1000u // from showing in the window
 } ride_flags_t;
 
 enum {
     CAR_ANIMATION_NONE = 0x00u,//1 vehicle sprite, 1 peep sprite
-    CAR_ANIMATION_STEAM = 0x01u,//4 vehicle sprites, uknown peep sprites, slow animation
-    CAR_ANIMATION_2 = 0x02u,//unknown, possibly 3 
-    CAR_ANIMATION_ROWING = 0x03u,// 1 vehicle sprite, 6 peep sprites
-    CAR_ANIMATION_4 = 0x04u,//unknown
-    CAR_ANIMATION_5 = 0x05u,//unknown, possibly 2 frames?
+    CAR_ANIMATION_MINITURE_RAILWAY_LOCOMOTIVE = 0x01u,//4 vehicle sprites, uknown peep sprites, slow animation
+    CAR_ANIMATION_SWAN = 0x02u,//1 vehicle sprite, 2 animated peep sprites, 1 un-animated peep sprite
+    CAR_ANIMATION_CANOES = 0x03u,// 1 vehicle sprite, 6 peep sprites
+    CAR_ANIMATION_ROW_BOATS = 0x04u,
+    CAR_ANIMATION_WATER_TRICYCLES = 0x05u,
     CAR_ANIMATION_OBSERVATION = 0x06u,//8 vehicle sprites, unknown peep sprites, we don't really know how to get this to work
-    CAR_ANIMATION_GENERIC = 0x07u,//4 vehicle sprites, 4 peep sprites, fast animation speed
-    CAR_ANIMATION_BICYCLE = 0x08u,//4 vehicle sprites, 4 peep sprites, medium animation speed, only animates with riders present
-    CAR_ANIMATION_4D = 0x09u,// unknown
+    CAR_ANIMATION_HELICARS = 0x07u,//4 vehicle sprites, 4 peep sprites, fast animation speed
+    CAR_ANIMATION_MONORAIL_CYCLES = 0x08u,//4 vehicle sprites, 4 peep sprites, medium animation speed, only animates with riders present
+    CAR_ANIMATION_MULTI_DIM_COASTER = 0x09u,// unknown
     
 } car_animation_t;
 
@@ -119,7 +121,7 @@ enum {
     CAR_FLAG_25 = 1 << 25,// related to swinging sprites?
     CAR_FLAG_2D_LOADING_WAYPOINTS = 1 << 26,
     CAR_FLAG_27 = 1 << 27,// related to swinging sprites
-	CAR_IS_CHAIRLIFT = 1 << 28,
+    CAR_IS_CHAIRLIFT = 1 << 28,
     CAR_FLAG_WATER_PROPULSION = 1 << 29,//accelerates downhill, does not stop when ride breaks down b/c water continues to flow
     CAR_IS_GO_KART = 1 << 30,
     CAR_FLAG_DODGEM_CAR_PLACEMENT = 1u << 31,
@@ -177,7 +179,7 @@ enum {
     CATEGORY_ROLLERCOASTER = 2,
     CATEGORY_THRILL_RIDE = 3,
     CATEGORY_WATER_RIDE = 4,
-	CATEGORY_NONE = 255
+    CATEGORY_NONE = 255
 } category_t;
 
 #define TRACK_STATION 0x0000000000000004l
@@ -273,14 +275,14 @@ typedef struct {
 
 typedef struct {
     uint32_t flags;
-	uint8_t animation_type;
+    uint8_t animation_type;
     uint32_t spacing;
     uint16_t unknown[9];
     uint16_t sprites;
     uint16_t friction;
     uint8_t running_sound;
     uint8_t secondary_sound;
-    uint8_t highest_rotation_index;
+    uint16_t highest_rotation_index;
     uint8_t rider_pairs;
     uint8_t riders;
     uint8_t rider_sprites;
@@ -289,10 +291,12 @@ typedef struct {
     uint8_t powered_acceleration;
     uint8_t powered_velocity;
     uint8_t z_value;
-	uint8_t car_visual;
-	uint8_t effect_visual;
-	uint8_t logflume_reverser_vehicle;
-	uint8_t double_sound_frequency;
+    uint8_t car_visual;
+    uint8_t effect_visual;
+    uint8_t logflume_reverser_vehicle;
+    uint8_t double_sound_frequency;
+    int8_t animation_speed_modifier;
+    int8_t steam_effect_modifier[2];
 } car_t;
 
 typedef struct {
@@ -325,7 +329,7 @@ typedef struct {
 typedef struct {
     color_scheme_t* default_colors;
     uint8_t num_default_colors;
-	uint8_t num_colors_override; // set to 255 to indicate each train gets a different color OF THE 32 COLORS INCLUDED!!!!
+    uint8_t num_colors_override; // set to 255 to indicate each train gets a different color OF THE 32 COLORS INCLUDED!!!!
     peep_position_data_t peep_positions[4];
 } ride_structures_t;
 
