@@ -282,7 +282,6 @@ static void project_render_sprites(project_t* project, object_t* object)
     for (i = 0; i < NUM_CARS; i++) {
         // Set flags
         uint32_t car_flags = project->cars[i].flags;
-        printf("flags %i spinning %i\n", car_flags, car_flags & CAR_IS_SPINNING);
         uint8_t animation_type = project->cars[i].animation_type;
         uint16_t sprite_flags = header->cars[i].sprites;
         // Number of images needed for this car (car + riders)
@@ -305,9 +304,10 @@ static void project_render_sprites(project_t* project, object_t* object)
         image_list_t* images = object->images;
         animation_t* animation = project->cars[i].animation;
 
+        printf("creating blank animation for car %i\n",i);
         animation_t* blank_animation = animation_new();
         for (int j = 0; i < animation->num_objects; i++) {
-            if (animation->objects[j]->model->is_rider) {
+            if (animation->objects[j]->model->is_rider > 0) {
                 animation_add_new_object(blank_animation, mrider);
             }
             else {
@@ -346,61 +346,61 @@ static void project_render_sprites(project_t* project, object_t* object)
             }
         }
         if (sprite_flags & SPRITE_STEEP_SLOPE) {
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 8, GS_TRANSITION, 0, 0);
             base_frame += 8 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 8, -GS_TRANSITION, 0, 0);
             base_frame += 8 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 32, STEEP, 0, 0);
             base_frame += 32 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 32, -STEEP, 0, 0);
             base_frame += 32 * sprites_per_view;
         }
         if (sprite_flags & SPRITE_VERTICAL_SLOPE) {
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, SV_TRANSITION, 0, 0);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, -SV_TRANSITION, 0, 0);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 32, VERTICAL, 0, 0);
             base_frame += 32 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 32, -VERTICAL, 0, 0);
             base_frame += 32 * sprites_per_view;
             // Loop sprites
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, VERTICAL + M_PI_12, 0, 0);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, -VERTICAL - M_PI_12, 0, 0);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, VERTICAL + 2 * M_PI_12, 0, 0);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, -VERTICAL - 2 * M_PI_12, 0, 0);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, VERTICAL + 3 * M_PI_12, 0, 0);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, -VERTICAL - 3 * M_PI_12, 0, 0);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, VERTICAL + 4 * M_PI_12, 0, 0);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, -VERTICAL - 4 * M_PI_12, 0, 0);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, VERTICAL + 5 * M_PI_12, 0, 0);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, -VERTICAL - 5 * M_PI_12, 0, 0);
             base_frame += 4 * sprites_per_view;
             render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
@@ -420,10 +420,10 @@ static void project_render_sprites(project_t* project, object_t* object)
             render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, -GENTLE_DIAGONAL, 0, M_PI_4);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, STEEP_DIAGONAL, 0, M_PI_4);
             base_frame += 4 * sprites_per_view;
-            render_rotation(images, blank_animation, car_flags, animation_type, base_frame, sprites_per_image,
+            render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
                 car_images, 4, -STEEP_DIAGONAL, 0, M_PI_4);
             base_frame += 4 * sprites_per_view;
         }
