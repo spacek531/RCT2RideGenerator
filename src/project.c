@@ -128,7 +128,7 @@ int count_sprites_per_view(uint32_t flags, uint8_t animation_type)
         }
 
     }
-    if (flags & CAR_IS_ANIMATED) { sprites_per_view = 4; }
+    if (flags & CAR_IS_ANIMATED) { sprites_per_view = 32; }
     if (flags & CAR_IS_SPINNING) { sprites_per_view = 16; }
     if (flags & CAR_EXTRA_SPINNING_FRAMES) {sprites_per_view = 32; } // assumes car is spinning
     return sprites_per_view;
@@ -204,7 +204,6 @@ void render_loading(image_list_t* image_list,
     for (int anim_frame = 0; anim_frame < 3; anim_frame++) {
         variables[VAR_RESTRAINT] += 0.25;
         variables[VAR_YAW] = 0;
-		printf("var_restraint is %i\n", variables[VAR_RESTRAINT]);
         for (int i = 0; i < 4; i++) {
             renderer_clear_buffers();
             render_data_t render_data = animation_split_render_begin(animation, rotation_matrix, variables);
@@ -234,8 +233,6 @@ int count_sprites_from_flags(uint16_t sprites, uint32_t flags)
             count += 72;
         }
     }
-    if (sprites & SPRITE_RESTRAINT_ANIMATION)
-        count += 12;
     if (flags & CAR_IS_SPINNING) {
         return count;
     }
@@ -290,7 +287,7 @@ static void project_render_sprites(project_t* project, object_t* object)
         // Number of sprites that must be rendered for each angle of an image
         int sprites_per_view = count_sprites_per_view(car_flags, project->cars[i].animation_type);
         // Total sprites for each image
-        int sprites_per_image = sprites_per_view * views_per_image;
+        int sprites_per_image = sprites_per_view * views_per_image + ((sprites & SPRITE_RESTRAINT_ANIMATION)?12 : 0);
         // Total sprites related to this car
         int total_car_sprites = sprites_per_image * car_images;
         // Compute first frame of this car's sprites
