@@ -86,26 +86,27 @@ typedef struct { // edits a single car at a time
     value_editor_t* friction_editor;
     value_editor_t* z_value_editor;
 
-	value_editor_t* spin_inertia_editor;
-	value_editor_t* spin_friction_editor;
-	value_editor_t* powered_acceleration_editor;
-	value_editor_t* powered_velocity_editor;
-	value_editor_t* car_visual_editor;
-	value_editor_t* effect_visual_editor;
+    value_editor_t* spin_inertia_editor;
+    value_editor_t* spin_friction_editor;
+    value_editor_t* powered_acceleration_editor;
+    value_editor_t* powered_velocity_editor;
+    value_editor_t* car_visual_editor;
+    value_editor_t* effect_visual_editor;
+    value_editor_t* vertical_override_editor;
 
     GtkWidget* animation_button;
     GtkWidget* container;
-	GtkWidget* left_vbox;
-	GtkWidget* right_vbox;
+    GtkWidget* left_vbox;
+    GtkWidget* right_vbox;
 } car_editor_t;
 
 
 typedef struct {
-	image_t** image;
+    image_t** image;
 
-	image_viewer_t* preview_viewer;
-	GtkWidget* set_preview;
-	GtkWidget* container;
+    image_viewer_t* preview_viewer;
+    GtkWidget* set_preview;
+    GtkWidget* container;
 } preview_editor_t;
 
 

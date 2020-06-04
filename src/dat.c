@@ -322,38 +322,39 @@ static void ride_header_write(ride_header_t* header, buffer_t* buffer)
         *((uint32_t*)(car_data + 0x04)) = car->spacing;
         /*Write friction*/
         *((uint16_t*)(car_data + 0x08)) = car->friction;
+        car_data[0x0A] = (uint8_t)car->unknown[4];
         /*Write riders*/
-        car_data[11] = car->rider_pairs | car->riders;
+        car_data[0x0B] = car->rider_pairs | car->riders;
+        car_data[0x0E] = (uint8_t)car->unknown[5];
+        car_data[0x0F] = (uint8_t)car->unknown[6];
+        car_data[0x10] = (uint8_t)car->unknown[7];
+        /*Write animation type*/
+        car_data[0x11] = car->animation_type;
         /*Write flags*/
         *((uint32_t*)(car_data + 0x12)) = car->flags;
         /*Write sprite flags*/
         *((uint16_t*)(car_data + 0x0C)) = car->sprites;
-        /*Write animation type*/
-        car_data[17] = car->animation_type;
         /*Write rider sprites*/
-        car_data[84] = car->rider_sprites;
+        car_data[0x54] = car->rider_sprites;
         /*Write spin parameters*/
-        car_data[85] = car->spin_inertia;
-        car_data[86] = car->spin_friction;
+        car_data[0x55] = car->spin_inertia;
+        car_data[0x56] = car->spin_friction;
         /*Write sound effects*/
-        car_data[87] = car->running_sound;
-        car_data[88] = car->logflume_reverser_vehicle;
-        car_data[89] = car->secondary_sound;
-        car_data[90] = car->double_sound_frequency;
-
+        car_data[0x57] = car->running_sound;
+        car_data[0x58] = car->logflume_reverser_vehicle;
+        car_data[0x59] = car->secondary_sound;
+        car_data[0x5A] = car->double_sound_frequency;
+        
         /*Write powered velocity*/
-        car_data[91] = car->powered_acceleration;
-        car_data[92] = car->powered_velocity;
+        car_data[0x5B] = car->powered_acceleration;
+        car_data[0x5C] = car->powered_velocity;
+        
+        car_data[0x5D] = car->car_visual;
+        car_data[0x5E] = car->effect_visual;
         /*Write Z value*/
-        car_data[95] = car->z_value;
-        /*Write unknown fields*/
-        car_data[93] = car->car_visual;
-        car_data[94] = car->effect_visual;// splash types: 0x01 no splash, 0x0B river rafts 0x0C log flume 0x0D splash boats
-        *((uint16_t*)(car_data + 96)) = car->unknown[1];
-        car_data[10] = (uint8_t)car->unknown[4];
-        car_data[14] = (uint8_t)car->unknown[5];
-        car_data[15] = (uint8_t)car->unknown[6];
-        car_data[16] = (uint8_t)car->unknown[7];
+        car_data[0x5F] = car->z_value;
+        car_data[0x60] = car->vertical_frames_override;
+        //car_data[0x61] = car->unknown[1];
         /*Move to next car*/
         car_data += 101;
     }

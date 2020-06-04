@@ -291,10 +291,11 @@ typedef struct {
     uint8_t powered_acceleration;
     uint8_t powered_velocity;
     uint8_t z_value;
-	uint8_t car_visual;
-	uint8_t effect_visual;
-	uint8_t logflume_reverser_vehicle;
-	uint8_t double_sound_frequency;
+    uint8_t car_visual;
+    uint8_t effect_visual;
+    uint8_t logflume_reverser_vehicle;
+    uint8_t double_sound_frequency;
+    uint8_t vertical_frames_override;
 } car_t;
 
 typedef struct {

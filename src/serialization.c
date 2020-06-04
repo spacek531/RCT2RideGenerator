@@ -477,25 +477,28 @@ json_t* project_serialize(project_t* project)
             json_object_set_new(car, "z_value", z_value);
 
 
-			json_t* spin_inertia = json_integer(project->cars[i].spin_inertia);
-			json_object_set_new(car, "spin_inertia", spin_inertia);
-			json_t* spin_friction = json_integer(project->cars[i].spin_friction);
-			json_object_set_new(car, "spin_friction", spin_friction);
-			json_t* powered_velocity = json_integer(project->cars[i].powered_velocity);
-			json_object_set_new(car, "powered_velocity", powered_velocity);
-			json_t* powered_acceleration = json_integer(project->cars[i].powered_acceleration);
-			json_object_set_new(car, "powered_acceleration", powered_acceleration);
+            json_t* spin_inertia = json_integer(project->cars[i].spin_inertia);
+            json_object_set_new(car, "spin_inertia", spin_inertia);
+            json_t* spin_friction = json_integer(project->cars[i].spin_friction);
+            json_object_set_new(car, "spin_friction", spin_friction);
+            json_t* powered_velocity = json_integer(project->cars[i].powered_velocity);
+            json_object_set_new(car, "powered_velocity", powered_velocity);
+            json_t* powered_acceleration = json_integer(project->cars[i].powered_acceleration);
+            json_object_set_new(car, "powered_acceleration", powered_acceleration);
 
-			json_t* car_visual = json_integer(project->cars[i].car_visual);
-			json_object_set_new(car, "car_visual", car_visual);
-			json_t* effect_visual = json_integer(project->cars[i].effect_visual);
-			json_object_set_new(car, "effect_visual", effect_visual);
+            json_t* car_visual = json_integer(project->cars[i].car_visual);
+            json_object_set_new(car, "car_visual", car_visual);
+            json_t* effect_visual = json_integer(project->cars[i].effect_visual);
+            json_object_set_new(car, "effect_visual", effect_visual);
 
-			json_t* logflume_reverser_vehicle = json_integer(project->cars[i].logflume_reverser_vehicle);
-			json_object_set_new(car, "logflume_reverser_vehicle", logflume_reverser_vehicle);
+            json_t* logflume_reverser_vehicle = json_integer(project->cars[i].logflume_reverser_vehicle);
+            json_object_set_new(car, "logflume_reverser_vehicle", logflume_reverser_vehicle);
 
-			json_t* double_sound_frequency = json_integer(project->cars[i].double_sound_frequency);
-			json_object_set_new(car, "double_sound_frequency", double_sound_frequency);
+            json_t* double_sound_frequency = json_integer(project->cars[i].double_sound_frequency);
+            json_object_set_new(car, "double_sound_frequency", double_sound_frequency);
+            
+            json_t* vertical_frames_override = json_integer(project->cars[i].vertical_frames_override);
+            json_object_set_new(car, "vertical_frames_override", vertical_frames_override);
 
         } else
             car = json_null();
@@ -528,27 +531,27 @@ project_t* project_deserialize(json_t* json)
         strcpy(project->description, json_string_value(description));
     }
     // Deserialize id
-	project->id = try_catch_int(json, "flags", rand());
+    project->id = try_catch_int(json, "flags", rand());
     // Deserialize flags
-	project->flags = try_catch_int(json, "flags", RIDE_SEPARATE_RIDE_DEPRECATED | RIDE_SEPARATE_RIDE);
+    project->flags = try_catch_int(json, "flags", RIDE_SEPARATE_RIDE_DEPRECATED | RIDE_SEPARATE_RIDE);
     // Deserialize modifiers
-	project->excitement = try_catch_int(json, "excitement", 0);
-	project->intensity = try_catch_int(json, "intensity", 0);
-	project->nausea = try_catch_int(json, "nausea", 0);
-	project->max_height = try_catch_int(json, "max_height", 0);
+    project->excitement = try_catch_int(json, "excitement", 0);
+    project->intensity = try_catch_int(json, "intensity", 0);
+    project->nausea = try_catch_int(json, "nausea", 0);
+    project->max_height = try_catch_int(json, "max_height", 0);
     // Deserialize track type
-	project->track_type = try_catch_int(json, "track_type", 5);
+    project->track_type = try_catch_int(json, "track_type", 5);
     // Deserialize minimum/maximum cars
-	project->minimum_cars = try_catch_int(json, "minimum_cars", 8);
-	project->maximum_cars = try_catch_int(json, "maximum_cars", 8);
+    project->minimum_cars = try_catch_int(json, "minimum_cars", 8);
+    project->maximum_cars = try_catch_int(json, "maximum_cars", 8);
     // Deserialize zero cars
-	project->zero_cars = try_catch_int(json, "zero_cars", 0);
+    project->zero_cars = try_catch_int(json, "zero_cars", 0);
     // Deserialize car icon index
-	project->car_icon_index = try_catch_int(json, "car_icon_index", 0);
-	//Deserialize ride categories
-	project->ride_categories[0] = try_catch_int(json, "ride_category_0", 0);
-	project->ride_categories[1] = try_catch_int(json, "ride_category_1", 255);
-	project->track_sections = try_catch_int(json, "track_sections", 0xFFFFFFFFFFFFFFFFl);
+    project->car_icon_index = try_catch_int(json, "car_icon_index", 0);
+    //Deserialize ride categories
+    project->ride_categories[0] = try_catch_int(json, "ride_category_0", 0);
+    project->ride_categories[1] = try_catch_int(json, "ride_category_1", 255);
+    project->track_sections = try_catch_int(json, "track_sections", 0xFFFFFFFFFFFFFFFFl);
 
     // Deserialize preview image
     json_t* preview = json_object_get(json, "preview");
@@ -627,47 +630,48 @@ project_t* project_deserialize(json_t* json)
             json_t* flags = json_object_get(car, "flags");
             json_t* animation_type = json_object_get(car, "animation_type");
 
-			if (animation_type != NULL && flags != NULL) {
-				project->cars[i].flags = json_integer_value(flags);
-				project->cars[i].animation_type = json_integer_value(animation_type);
-			}
-			else if (flags != NULL && animation_type == NULL) { // previous iterations of the tool grouped animation type into flags erroneously
-				project->cars[i].flags = json_integer_value(flags) >> 8; // updating to the new logic requires additional steps
-				project->cars[i].animation_type = json_integer_value(flags) & 0xFF; // aaaaaa
-			}
+            if (animation_type != NULL && flags != NULL) {
+                project->cars[i].flags = json_integer_value(flags);
+                project->cars[i].animation_type = json_integer_value(animation_type);
+            }
+            else if (flags != NULL && animation_type == NULL) { // previous iterations of the tool grouped animation type into flags erroneously
+                project->cars[i].flags = json_integer_value(flags) >> 8; // updating to the new logic requires additional steps
+                project->cars[i].animation_type = json_integer_value(flags) & 0xFF; // aaaaaa
+            }
 
             json_t* sprites = json_object_get(car, "sprites");
             if (sprites != NULL)
                 project->cars[i].sprites = json_integer_value(sprites);
             // Spacing
-			project->cars[i].spacing = try_catch_int(car, "spacing", 8675309);
+            project->cars[i].spacing = try_catch_int(car, "spacing", 8675309);
             // Friction
-			json_t* mass = json_object_get(car, "mass");
-			json_t* friction = json_object_get(car, "friction");
-			if (mass != NULL) {
-				project->cars[i].friction = json_integer_value(mass);
-			}
-			else if (friction != NULL)
-			{
-				project->cars[i].friction = json_integer_value(friction);
-			}
-			else
-			{
-				project->cars[i].friction = 235;
-			} /**/
+            json_t* mass = json_object_get(car, "mass");
+            json_t* friction = json_object_get(car, "friction");
+            if (mass != NULL) {
+                project->cars[i].friction = json_integer_value(mass);
+            }
+            else if (friction != NULL)
+            {
+                project->cars[i].friction = json_integer_value(friction);
+            }
+            else
+            {
+                project->cars[i].friction = 235;
+            } /**/
             // Running sound
-			project->cars[i].running_sound = try_catch_int(car, "running_sound", 255);
-			project->cars[i].secondary_sound = try_catch_int(car, "secondary_sound", 255);
-			project->cars[i].z_value = try_catch_int(car, "z_value", 5);
-			project->cars[i].spin_inertia = try_catch_int(car, "spin_inertia", 0);
-			project->cars[i].spin_friction = try_catch_int(car, "spin_friction", 0);
-			project->cars[i].powered_acceleration = try_catch_int(car, "powered_acceleration", 0);
-			project->cars[i].powered_velocity = try_catch_int(car, "powered_velocity", 0);
+            project->cars[i].running_sound = try_catch_int(car, "running_sound", 255);
+            project->cars[i].secondary_sound = try_catch_int(car, "secondary_sound", 255);
+            project->cars[i].z_value = try_catch_int(car, "z_value", 5);
+            project->cars[i].spin_inertia = try_catch_int(car, "spin_inertia", 0);
+            project->cars[i].spin_friction = try_catch_int(car, "spin_friction", 0);
+            project->cars[i].powered_acceleration = try_catch_int(car, "powered_acceleration", 0);
+            project->cars[i].powered_velocity = try_catch_int(car, "powered_velocity", 0);
 
-			project->cars[i].car_visual = try_catch_int(car, "car_visual", 0);
-			project->cars[i].effect_visual = try_catch_int(car, "effect_visual", 1);
-			project->cars[i].logflume_reverser_vehicle = try_catch_int(car, "logflume_reverser_vehicle", 0);
-			project->cars[i].double_sound_frequency = try_catch_int(car, "double_sound_frequency", 0);
+            project->cars[i].car_visual = try_catch_int(car, "car_visual", 0);
+            project->cars[i].effect_visual = try_catch_int(car, "effect_visual", 1);
+            project->cars[i].logflume_reverser_vehicle = try_catch_int(car, "logflume_reverser_vehicle", 0);
+            project->cars[i].double_sound_frequency = try_catch_int(car, "double_sound_frequency", 0);
+            project->cars[i].vertical_frames_override = try_catch_int(car, "vertical_frames_override", 0);
         }
     }
     return project;

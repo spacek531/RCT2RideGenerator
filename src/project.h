@@ -12,28 +12,27 @@ typedef struct { // moving the car_t properties here for better WYSIWYG (do-able
     animation_t* animation;
     uint32_t flags;
     uint32_t sprites;
-	uint32_t render_sprites;
+    uint32_t render_sprites;
     uint32_t spacing;
     uint16_t friction;
     uint8_t running_sound;
     uint8_t secondary_sound;
-	uint8_t animation_type;
-	uint8_t car_visual;// set to 0 by default
-	uint8_t effect_visual;// set to 1 by default
+    uint8_t animation_type;
+    uint8_t car_visual;// set to 0 by default
+    uint8_t effect_visual;// set to 1 by default
     uint8_t z_value;
-	uint8_t spin_inertia;
-	uint8_t spin_friction;
-	uint8_t powered_acceleration;
-	uint8_t powered_velocity;
-	uint8_t logflume_reverser_vehicle;
-	uint8_t double_sound_frequency;
-
-
-	uint8_t highest_rotation_index; // not for editing by mere mortals
-	uint8_t rider_pairs;
-	uint8_t riders;
-	uint8_t rider_sprites;
-	uint16_t unknown[9];
+    uint8_t spin_inertia;
+    uint8_t spin_friction;
+    uint8_t powered_acceleration;
+    uint8_t powered_velocity;
+    uint8_t logflume_reverser_vehicle;
+    uint8_t double_sound_frequency;
+    uint8_t vertical_frames_override;
+    uint8_t highest_rotation_index; // not for editing by mere mortals
+    uint8_t rider_pairs;
+    uint8_t riders;
+    uint8_t rider_sprites;
+    uint16_t unknown[9];
 } car_settings_t;
 
 typedef struct {

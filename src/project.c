@@ -276,7 +276,6 @@ static void project_render_sprites(project_t* project, object_t* object)
     for (i = 0; i < NUM_CARS; i++) {
         // Set flags
         uint32_t car_flags = project->cars[i].flags;
-        printf("flags %i spinning %i\n", car_flags, car_flags & CAR_IS_SPINNING);
         uint8_t animation_type = project->cars[i].animation_type;
         uint16_t sprite_flags = header->cars[i].sprites;
         // Number of images needed for this car (car + riders)
@@ -717,17 +716,10 @@ object_t* project_export_dat(project_t* project)
             cars_used[project->car_types[i]] = 1;
     for (int i = 0; i < NUM_CARS; i++) {
         if (cars_used[i] || project->cars[i].flags & CAR_CAN_INVERT) {
-            // printf("%d %d %d %d
-            // %d\n",object->ride_header->cars[i].unknown[0],object->ride_header->cars[i].unknown[1],object->ride_header->cars[i].unknown[2],object->ride_header->cars[i].unknown[3],object->ride_header->cars[i].unknown[4]);
             object->ride_header->cars[i].highest_rotation_index = 31;
-			object->ride_header->cars[i].car_visual = project->cars[i].car_visual;
-			object->ride_header->cars[i].effect_visual = project->cars[i].effect_visual;
+            object->ride_header->cars[i].car_visual = project->cars[i].car_visual;
+            object->ride_header->cars[i].effect_visual = project->cars[i].effect_visual;
             object->ride_header->cars[i].flags = project->cars[i].flags;
-            // Enable all extra swinging frames
-        // printf("flags %x\n",project->cars[i].flags);
-            //if (!project->cars[i].flags & CAR_CAN_INVERT /*|| i%2==0*/) object->ride_header->cars[i].flags |= CAR_FLAG_13;//this is only set on the above trains for some reason.
-            //if (project->cars[i].flags & CAR_IS_SWINGING) {
-                //see RideObject.cpp for details
                 /*
                 Swinging flags karnaugh map
                 FLAG_21 | FLAG_25 | FLAG_27 | number of sprites
@@ -740,13 +732,8 @@ object_t* project_export_dat(project_t* project)
                     1         1         -        7
                     1         1         1       13
                 */
-                //object->ride_header->cars[i].flags |= (CAR_IS_SWINGING);
-                //if (i%2==0) 
-                //object->ride_header->cars[i].flags |= CAR_FLAG_27;//this is only set on the above trains for some reason.
-                //object->ride_header->cars[i].extra_swing_frames = 0x08; //this is 1<<27 (enables 13 frames instead of 7)
-            //}
             if (project->cars[i].flags & CAR_IS_POWERED) {
-				object->ride_header->cars[i].powered_velocity = project->cars[i].powered_velocity;
+                object->ride_header->cars[i].powered_velocity = project->cars[i].powered_velocity;
                 object->ride_header->cars[i].powered_acceleration = project->cars[i].powered_acceleration;
             }
             if (project->cars[i].flags & CAR_IS_ANIMATED) {
@@ -756,10 +743,10 @@ object_t* project_export_dat(project_t* project)
                 object->ride_header->cars[i].spin_inertia = project->cars[i].spin_inertia;
                 object->ride_header->cars[i].spin_friction = project->cars[i].spin_friction;
             }
-        // printf("flags of car %x: %x %x\n",i,object->ride_header->cars[i].flags,object->ride_header->cars[i].extra_swing_frames);
-
-            // object->ride_header->cars[i].flags |= CAR_COASTING_POWER;
-
+            if (project->cars[i].flags & CAR_OVERRIDE_VERTICAL_FRAMES) {
+                object->ride_header->cars[i].vertical_frames_override = project->cars[i].vertical_frames_override;
+            }
+            
             object->ride_header->cars[i].friction = project->cars[i].friction;
             object->ride_header->cars[i].spacing = project->cars[i].spacing;
             object->ride_header->cars[i].running_sound = project->cars[i].running_sound;
