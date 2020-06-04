@@ -255,6 +255,7 @@ static car_editor_t* car_editor_new()
 	flag_editor_add_checkbox(editor->flag_editor, "Car Flag 11", CAR_FLAG_11);
 	flag_editor_add_checkbox(editor->flag_editor, "Car Flag 13", CAR_FLAG_13);
     flag_editor_add_checkbox(editor->flag_editor, "Minigolfer", CAR_IS_MINIGOLFER);
+    flag_editor_add_checkbox(editor->flag_editor, "Peeps animate",CAR_FLAG_RIDER_ANIMATION);
     flag_editor_add_checkbox(editor->flag_editor, "2D loading", CAR_FLAG_2D_LOADING_WAYPOINTS);
     gtk_box_pack_start(GTK_BOX(editor->left_vbox), editor->flag_editor->container, FALSE, FALSE, 1);
 

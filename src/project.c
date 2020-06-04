@@ -287,7 +287,7 @@ static void project_render_sprites(project_t* project, object_t* object)
         // Number of sprites that must be rendered for each angle of an image
         int sprites_per_view = count_sprites_per_view(car_flags, project->cars[i].animation_type);
         // Total sprites for each image
-        int sprites_per_image = sprites_per_view * views_per_image + ((sprites & SPRITE_RESTRAINT_ANIMATION)?12 : 0);
+        int sprites_per_image = sprites_per_view * views_per_image + ((sprite_flags & SPRITE_RESTRAINT_ANIMATION)?12 : 0);
         // Total sprites related to this car
         int total_car_sprites = sprites_per_image * car_images;
         // Compute first frame of this car's sprites
@@ -776,7 +776,7 @@ object_t* project_export_dat(project_t* project)
                 if (project->cars[i].sprites & SPRITE_DIAGONAL_SLOPE)
                     object->ride_header->cars[i].sprites |= SPRITE_DIAGONAL_BANK_TRANSITION | SPRITE_SLOPED_BANK_TRANSITION;
                 if (project->cars[i].sprites & SPRITE_GENTLE_SLOPE)
-                    object->ride_header->cars[i].sprites |= SPRITE_BANKED_SLOPE_TRANSITION | SPRITE_SLOPE_BANK_TRANSITION | SPRITE_SLOPED_BANK_TRANSITION | SPRITE_SLOPED_BANKED_TURN;
+                    object->ride_header->cars[i].sprites |= SPRITE_BANKED_SLOPE_TRANSITION | SPRITE_SLOPE_BANK_TRANSITION | SPRITE_SLOPED_BANK_TRANSITION;
             }
             if (project->cars[i].sprites & SPRITE_INLINE_TWIST) {
                 object->ride_header->cars[i].sprites |= SPRITE_BANKING;

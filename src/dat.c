@@ -319,27 +319,27 @@ static void ride_header_write(ride_header_t* header, buffer_t* buffer)
         /*Write highest rotation index*/
         car_data[0] = car->highest_rotation_index;
         /*Write spacing*/
-        *((uint32_t*)(car_data + 4)) = car->spacing;
+        *((uint32_t*)(car_data + 0x04)) = car->spacing;
         /*Write friction*/
-        *((uint16_t*)(car_data + 8)) = car->friction;
+        *((uint16_t*)(car_data + 0x08)) = car->friction;
         /*Write riders*/
         car_data[11] = car->rider_pairs | car->riders;
+        /*Write flags*/
+        *((uint32_t*)(car_data + 0x12)) = car->flags;
         /*Write sprite flags*/
-        *((uint16_t*)(car_data + 12)) = car->sprites;
+        *((uint16_t*)(car_data + 0x0C)) = car->sprites;
+        /*Write animation type*/
+        car_data[17] = car->animation_type;
         /*Write rider sprites*/
         car_data[84] = car->rider_sprites;
-		/*Write animation type*/
-		car_data[17] = car->animation_type;
-        /*Write flags*/
-        *((uint32_t*)(car_data + 18)) = car->flags;
         /*Write spin parameters*/
         car_data[85] = car->spin_inertia;
         car_data[86] = car->spin_friction;
         /*Write sound effects*/
         car_data[87] = car->running_sound;
-		car_data[88] = car->logflume_reverser_vehicle;
+        car_data[88] = car->logflume_reverser_vehicle;
         car_data[89] = car->secondary_sound;
-		car_data[90] = car->double_sound_frequency;
+        car_data[90] = car->double_sound_frequency;
 
         /*Write powered velocity*/
         car_data[91] = car->powered_acceleration;
@@ -347,7 +347,7 @@ static void ride_header_write(ride_header_t* header, buffer_t* buffer)
         /*Write Z value*/
         car_data[95] = car->z_value;
         /*Write unknown fields*/
-	car_data[93] = car->car_visual;
+        car_data[93] = car->car_visual;
         car_data[94] = car->effect_visual;// splash types: 0x01 no splash, 0x0B river rafts 0x0C log flume 0x0D splash boats
         *((uint16_t*)(car_data + 96)) = car->unknown[1];
         car_data[10] = (uint8_t)car->unknown[4];
