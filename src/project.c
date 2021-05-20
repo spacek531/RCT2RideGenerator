@@ -4,6 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define CORKSCREW_ANGLE_1 2.0 * M_PI_12
+#define CORKSCREW_ANGLE_2 4.0 * M_PI_12
+#define CORKSCREW_ANGLE_3 M_PI_2
+#define CORKSCREW_ANGLE_4 8.0 * M_PI_12
+#define CORKSCREW_ANGLE_5 10.0 * M_PI_12
+
 project_t* project_new()
 {
     int i;
@@ -128,12 +134,25 @@ int count_sprites_per_view(uint32_t flags, uint8_t animation_type)
         }
 
     }
-    if (flags & CAR_IS_ANIMATED) { sprites_per_view = 4; }
-    if (flags & CAR_IS_SPINNING) { sprites_per_view = 16; }
-    if (flags & CAR_EXTRA_SPINNING_FRAMES) {sprites_per_view = 32; } // assumes car is spinning
-    return sprites_per_view;
+    if (flags & CAR_IS_ANIMATED) {
+        switch (animation_type)
+        {
+        case 1: {sprites_per_view = 4; break; } // steam train
+        case 2: {sprites_per_view = 4; break; } // pedal boats (VERY WEIRD!!!!)
+        case 3: {sprites_per_view = 6; break; } // canoes
+        case 4: {sprites_per_view = 7; break; } // rowboats
+        case 5: {sprites_per_view = 2; break; } // water tricycles
+        case 6: {sprites_per_view = 8; break; } // observation towerk
+        case 7: {sprites_per_view = 4; break; } // helicars
+        case 8: {sprites_per_view = 4; break; } // monorail cycles
+        case 9: {sprites_per_view = 16; break; } // 4D rotation (unknown number of frames)
+        default: sprites_per_view = 1;// no animation
+        }
+        if (flags & CAR_IS_SPINNING) { sprites_per_view = 16; }
+        if (flags & CAR_EXTRA_SPINNING_FRAMES) { sprites_per_view = 32; } // assumes car is spinning
+        return sprites_per_view;
+    }
 }
-
 
 void render_rotation(image_list_t* image_list,
     animation_t* animation,
@@ -234,11 +253,6 @@ int count_sprites_from_flags(uint16_t sprites, uint32_t flags)
             count += 72;
         }
     }
-    if (sprites & SPRITE_RESTRAINT_ANIMATION)
-        count += 12;
-    if (flags & CAR_IS_SPINNING) {
-        return count;
-    }
     if (sprites & SPRITE_STEEP_SLOPE)
         count += 80;
     if (sprites & SPRITE_VERTICAL_SLOPE)
@@ -279,7 +293,6 @@ static void project_render_sprites(project_t* project, object_t* object)
     for (i = 0; i < NUM_CARS; i++) {
         // Set flags
         uint32_t car_flags = project->cars[i].flags;
-        printf("flags %i spinning %i\n", car_flags, car_flags & CAR_IS_SPINNING);
         uint8_t animation_type = project->cars[i].animation_type;
         uint16_t sprite_flags = header->cars[i].sprites;
         // Number of images needed for this car (car + riders)
@@ -292,7 +305,8 @@ static void project_render_sprites(project_t* project, object_t* object)
         // Total sprites for each image
         int sprites_per_image = sprites_per_view * views_per_image;
         // Total sprites related to this car
-        int total_car_sprites = sprites_per_image * car_images;
+        // Count restraint sprites separately!
+        int total_car_sprites = sprites_per_image * car_images + (sprite_flags & SPRITE_RESTRAINT_ANIMATION ? 12 : 0);
         // Compute first frame of this car's sprites
         int base_frame = object->images->num_images;
         // Allocate images for car
@@ -532,11 +546,6 @@ static void project_render_sprites(project_t* project, object_t* object)
             base_frame += 4 * sprites_per_view;
         }
         if (sprite_flags & SPRITE_CORKSCREW) {
-#define CORKSCREW_ANGLE_1 2.0 * M_PI_12
-#define CORKSCREW_ANGLE_2 4.0 * M_PI_12
-#define CORKSCREW_ANGLE_3 M_PI_2
-#define CORKSCREW_ANGLE_4 8.0 * M_PI_12
-#define CORKSCREW_ANGLE_5 10.0 * M_PI_12
 
             // Corkscrew right
             render_rotation(images, animation, car_flags, animation_type, base_frame, sprites_per_image,
